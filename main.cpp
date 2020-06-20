@@ -1,47 +1,64 @@
 //
 //  main.cpp
-//  twoSum
+//  ReverseInteger
 //
-//  Created by Bryant Sahota on 12/9/19.
+//  Created by Bryant Sahota on 12/12/19.
 //  Copyright © 2019 Bryant Sahota. All rights reserved.
 //
 
 #include <iostream>
-#include <vector>
+#include <stack>
+#include <string>
 
 class Solution {
 public:
-    std::vector<int> twoSum(std::vector<int>& nums, int target)
-    {
-        std::vector<int> solution;
-        for(int i = 0; i < nums.size(); i++)
+    int reverse(int x) {
+        //negative check
+        bool isNegative = false;
+        std::stack<int>fNumStack;
+        //Place numbers into stack to reverse
+        while(x != 0)
         {
-            for(int j = i+1; j < nums.size(); j++)
+            if(x < 0)
             {
-                if(nums[i] + nums[j] == target)
-                {
-                    solution.push_back(i);
-                    solution.push_back(j);
-                }
+                isNegative = true;
+                fNumStack.push((x%10)*(-1));
+                x = (x/10)*(-1);
             }
+            //Place each number into stack
+            fNumStack.push(x%10);
+            x = x/10;
         }
-        if(solution.size() == 0)
+        //Reverse the stack
+        std::stack<int>rNumStack;
+        while(fNumStack.size() > 0)
         {
-            solution.push_back(666);
-            solution.push_back(-666);
+            rNumStack.push(fNumStack.top());
+            fNumStack.pop();
         }
-        return solution;
+        //string for reverse integer
+        std::string strReverse;
+        //Turn the stack into a string
+        while(rNumStack.size() > 0)
+        {
+            strReverse += std::to_string(rNumStack.top());
+            rNumStack.pop();
+        }
+        std::cout << strReverse << std::endl;
+        //turn the string back into an int that has been reversed
+        int reverseInt = stoi(strReverse);
+        if(isNegative == true)
+        {
+            reverseInt = reverseInt*(-1);
+        }
+        return reverseInt;
     }
 };
 
-
 int main()
 {
-    std::vector<int> nums = {13, 2, 7, 5};
-    int target = 9;
     Solution s;
-    std::vector<int> sol = s.twoSum(nums, target);
-    std::cout << sol[0] << std::endl;
-    std::cout << sol[1] << std::endl;
+    int number = 12340;
+    std::cout << number << std::endl;
+    std::cout << s.reverse(number) << std::endl;
 }
-
